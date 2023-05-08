@@ -12,7 +12,7 @@ public class Application {
 
       //  employeeDAO.getAllEmployee();
 
-       // employeeDAO.setEmployee(new Employee("Тархан","Болотов", "M", 32,8));
+       // employeeDAO.setEmployee(new  Employee("Тархан","Болотов", "M", 32,8));
 
      //   employeeDAO.deleteEmployee(6);
 

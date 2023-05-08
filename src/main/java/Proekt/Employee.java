@@ -23,7 +23,7 @@ public class Employee {
     public Employee() {
     }
 
-    public Employee( String first_nama, String last_name, String gender, int age,  int citytwo) {
+    public Employee( String first_nama, String last_name, String gender, int age,  int  citytwo) {
         this.first_nama = first_nama;
         this.last_name = last_name;
         this.gender = gender;

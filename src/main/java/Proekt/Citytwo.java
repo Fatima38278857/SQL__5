@@ -3,7 +3,7 @@ package Proekt;
 public class Citytwo {
 
 
-    private  String city_name;
+    private  String  city_name;
 
     public Citytwo(String city_name) {
         this.city_name = city_name;

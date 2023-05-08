@@ -47,7 +47,7 @@ public  class EmployeeDAOImpl implements EmployeeDAO {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
 
         entityManager.getTransaction().begin();
-        Query query = entityManager.createQuery("UPDATE Employee e SET e.first_nama = : first_name, e.last_name = : last_name, e.gender = :gender, e.age = :age,e.citytwo = :citytwo WHERE e.id = :id");
+        Query query = entityManager.createQuery(" UPDATE Employee e SET e.first_nama = : first_name, e.last_name = : last_name, e.gender = :gender, e.age = :age,e.citytwo = :citytwo WHERE e.id = :id");
         query.setParameter("id", id);
         query.setParameter("first_name", employee.getFirst_nama());
         query.setParameter("last_name", employee.getLast_name());
