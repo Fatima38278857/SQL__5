@@ -1,85 +1,99 @@
 package Proekt;
 
+
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
-import java.sql.SQLException;
 import java.util.List;
 
+public class CityDAOImpl implements CityDAO {
 
-public  class EmployeeDAOImpl implements EmployeeDAO {
+    @Override
+    public void addToTableCity(City city) {
 
 
-    public void setEmployee(Employee employee) throws SQLException { // СОЗДАТЬ (добавление) сущности Employee в таблицу.
 
         EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("myPersistenceUnit");
         EntityManager entityManager = entityManagerFactory.createEntityManager();
 
         entityManager.getTransaction().begin();
-        entityManager.persist(employee);
+        entityManager.persist(city);
         entityManager.getTransaction().commit();
 
         entityManager.close();
         entityManagerFactory.close();
+    }
 
+
+    @Override
+    public void updateCity(int id, City city) {
+
+        EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("myPersistenceUnit");
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        entityManager.getTransaction().begin();
+
+        Query query = entityManager.createQuery("UPDATE City с SET с.city_name = :cityname WHERE с.id = :id");
+        query.setParameter("cityname", city.getCity_name());
+        query.setParameter("id", id);
+        query.executeUpdate();
+
+        entityManager.getTransaction().commit();
+        entityManager.close();
+        entityManagerFactory.close();
     }
 
     @Override
-    public void deleteEmployee(int id) { // Удаление конкретного объекта Employee из базы по id.
+    public void findCityWithId(int id) {
 
         EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("myPersistenceUnit");
         EntityManager entityManager = entityManagerFactory.createEntityManager();
-
         entityManager.getTransaction().begin();
-        Query query = entityManager.createQuery("DELETE FROM Employee e where e.id = :id");
-        query.setParameter("id", id);
-        query.executeUpdate();
+
+        City city = entityManager.find(City.class, id);
         entityManager.getTransaction().commit();
+
+        System.out.println(city.getCity_name());
+        city.getEmployeeList().stream().forEach(System.out::println);
 
         entityManager.close();
         entityManagerFactory.close();
     }
 
     @Override
-    public void ChangeEmployeebyID(int id, Employee employee) { // Изменение конкретного объекта Employee в базе по id
+    public void getAllCity() {
+
         EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("myPersistenceUnit");
         EntityManager entityManager = entityManagerFactory.createEntityManager();
-
         entityManager.getTransaction().begin();
-        Query query = entityManager.createQuery(" UPDATE Employee e SET e.first_nama = : first_name, e.last_name = : last_name, e.gender = :gender, e.age = :age,e.city = :citytwo WHERE e.id = :id");
-        query.setParameter("id", id);
-        query.setParameter("first_name", employee.getFirst_nama());
-        query.setParameter("last_name", employee.getLast_name());
-        query.setParameter("gender", employee.getGender());
-        query.setParameter("age", employee.getAge());
-        query.setParameter("city", employee.getCity());
-        query.executeUpdate();
+
+        Query query = entityManager.createQuery("select c from City c order by c.id");
+        List<City> cityList = query.getResultList();
+
+        entityManager.getTransaction().commit();
+        entityManager.close();
+        entityManagerFactory.close();
+
+        for (City city : cityList) {
+            System.out.println(city.getCity_name());
+            city.getEmployeeList().stream().forEach(System.out::println);
+        }
+    }
+
+    @Override
+    public void delOneCity(int id) {
+
+        EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("myPersistenceUnit");
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        entityManager.getTransaction().begin();
+
+        City city = entityManager.find(City.class, id);
+        entityManager.remove(city);
+
         entityManager.getTransaction().commit();
 
         entityManager.close();
         entityManagerFactory.close();
-
     }
-    public void getAllEmployee() {
-
-        EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("myPersistenceUnit");
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
-
-        entityManager.getTransaction().begin();
-        Query query = entityManager.createQuery("SELECT e FROM Employee e ORDER BY e.id");
-        entityManager.getTransaction().commit();
-
-        List employeeList = query.getResultList();
-
-        entityManager.close();
-        entityManagerFactory.close();
-
-        employeeList.stream().forEach(System.out::println);
-    }
-
-
-    }
-
-
-
+}
